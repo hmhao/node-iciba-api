@@ -1,0 +1,16 @@
+{"Angular": {
+    "word": "Angular",
+    "related": "Angular JS",
+    "description": "利用数据绑定、依赖注入等技术构建webapp的框架。",
+    "mp3": "http://res.iciba.com/resource/amp3/1/0/d1/8b/d18b8624a0f5f721da7b82365fc562dd.mp3"
+}, "Bower": {
+    "word": "Bower",
+    "related": "Bower",
+    "description": "为web设计的包管理工具",
+    "mp3": "http://res.iciba.com/resource/amp3/1/0/c3/a4/c3a4419258c98e9dc1dd5c36a7ec9fad.mp3"
+}, "Grunt": {
+    "word": "Grunt",
+    "related": "Grunt",
+    "description": "JavaScript 任务执行工具",
+    "mp3": "http://res.iciba.com/resource/amp3/1/0/ab/95/ab950343e97df05f1262e24666111fb6.mp3"
+}}
