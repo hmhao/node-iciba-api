@@ -98,4 +98,58 @@ Iciba.prototype.dict = function (word, fn) {
     });
 };
 
+Iciba.prototype.dict2 = function(word, fn){
+    var url = "http://www.iciba.com/" + word;
+    return request.get(url, function (err, res, data) {
+        if (err) {
+            return fn('API request fail');
+        }
+        var result = {
+            word: word,
+            spells: [],
+            translations: [],
+            examples: []
+        };
+        var $ = cheerio.load(data, {
+            ignoreWhitespace: true,
+            xmlMode: true
+        });
+        //console.log($.html());
+        var dictbar = $('#dict_main .dictbar');
+        var i,len;
+        var eg,spell,linkClickFn,match,pos,sent,example;
+        //音标
+        for (eg = dictbar.find('.dict_title .prons .eg'), i = 0, len = eg.length; i < len; i++) {
+            spell = eg.eq(i);
+            linkClickFn = spell.find('a').attr('onclick');
+            match = /'(.*?mp3)'/g.exec(linkClickFn);
+            if (match) {
+                result.spells.push({
+                    text: spell.find('.fl').text(),
+                    mp3: match[1]
+                });
+            }
+        }
+
+        //翻译
+        for (pos = dictbar.find('.group_prons .group_pos'), i = 0, len = pos.length; i < len; i++) {
+            result.translations.push({
+                type: pos.eq(i).find('.fl').text(),
+                desc: pos.eq(i).find('.label_list').text().trim()
+            });
+        }
+
+        //例句
+        for (sent = dictbar.siblings('.simple').find('.tab_content1 dl'), i = 0, len = sent.length; i < len; i++) {
+            example = sent.eq(i);
+            result.examples.push({
+                en: example.find('dt').text().replace(/^\d\./,'').trim(),
+                cn: example.find('dd').text().trim()
+            });
+        }
+        //console.log(result);
+        return fn(null, result);
+    });
+}
+
 module.exports = Iciba;

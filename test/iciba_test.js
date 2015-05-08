@@ -46,5 +46,13 @@ exports['awesome'] = {
             test.notEqual(res, null, 'should return sth.');
             test.done();
         });
+    },
+    'test3': function (test) {
+        test.expect(2);
+        iciba.dict2('apple', function (err, res) {
+            test.equal(err, null, 'should be no error');
+            test.notEqual(res, null, 'should return sth.');
+            test.done();
+        });
     }
 };
