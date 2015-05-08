@@ -11,8 +11,8 @@ var
  https://github.com/caolan/nodeunit
 
      Test methods:
-     test.expect(numAssertions)
-     test.done()
+     test.expect(numAssertions)                         // 指定一个测试内期望被执行的断言数量，确保你的回调和断言被执行到了。
+     test.done()                                        // 结束当前的测试函数并继续执行下一个
      Test assertions:
      test.ok(value, [message])
      test.equal(actual, expected, [message])
@@ -46,5 +46,14 @@ exports['awesome'] = {
             test.notEqual(res, null, 'should return sth.');
             test.done();
         });
+    },
+    'test3': function (test) {
+        test.expect(2);
+        iciba.dict2('apple', function (err, res) {
+            test.equal(err, null, 'should be no error');
+            test.notEqual(res, null, 'should return sth.');
+            test.done();
+        });
     }
 };
+

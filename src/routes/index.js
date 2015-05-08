@@ -22,7 +22,7 @@ fs.readFile(file, {encoding: 'utf-8', flag: 'a+'}, function (err, data) {
     }
     if (data) {
         userVocabulary = JSON.parse(data);
-    }else{
+    } else {
         userVocabulary = {};
     }
 });
@@ -58,9 +58,9 @@ router.get('/api/v', function (req, res) {
         type = req.query.t || 'auto';//auto,en-zh,zh-en...
 
     if (word) {
-        if(userVocabulary[word]){
+        if (userVocabulary[word]) {
             res.send(userVocabulary[word]);
-        }else{
+        } else {
             iciba.query(word, type, function (err, result) {
                 if (err) {
                     //console.warn(err);
@@ -68,10 +68,10 @@ router.get('/api/v', function (req, res) {
                     //console.log(result);
                     userVocabulary[result.word] = {
                         word: result.word,
-                        related: '',
+                        related: result.word,
                         description: '',
-                        mp3: result.spells[1].mp3
-                    }
+                        mp3: (result.spells[1] && result.spells[1].mp3) || ''
+                    };
                     fs.writeFile(file, JSON.stringify(userVocabulary), {encoding: 'utf-8', flag: 'w+'}, function (err) {
                         if (err) {
                             throw err;
