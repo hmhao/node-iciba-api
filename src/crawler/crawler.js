@@ -18,7 +18,8 @@ var config = {
     url: 'http://div.io/digg',
     rule: '',
     charset: 'utf8',
-    headers: ''
+    headers: '',
+    filter: /(\.?JS)|CSS|HTML|UI/i
 };
 
 var Crawler = function () {
@@ -79,12 +80,12 @@ Crawler.prototype.analyse = function($){
             return;
         }
         word = match[1].trim();
-        iciba.query(word, null, function (err, result) {
+        iciba.query(word.replace(config.filter,''), null, function (err, result) {
             if (err) {
                 console.warn(err);
                 return;
             }
-            userVocabulary[result.word] = {
+            userVocabulary[word] = {
                 word: word,
                 related: word,
                 description: description,
