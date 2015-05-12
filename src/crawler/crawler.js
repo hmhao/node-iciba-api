@@ -3,8 +3,8 @@ var request = require("request"),
     path = require('path'),
     fs = require('fs'),
     cheerio = require("cheerio"),
-    iciba = new (require('../api/iciba'));
-
+    iciba = new (require('../api/iciba')),
+    vocabularyDAO = require('../model/vocabularyDAO');
 
 var root = path.join(__dirname, '../../');
 var dataDir = path.join(root, 'data');
@@ -64,7 +64,7 @@ Crawler.prototype.start = function () {
 };
 
 Crawler.prototype.analyse = function($){
-    var userVocabulary = {},
+    var _this = this,
         items = $('div.digg-list>ul>li'),
         len = items.length,
         i = 0,
@@ -80,30 +80,37 @@ Crawler.prototype.analyse = function($){
             return;
         }
         word = match[1].trim();
+        vocabularyDAO.exist(word, function(data){
+            if(!data){
+                _query(word,description);
+            }
+        });
+    };
+
+    var _query = function(word,description){
         iciba.query(word.replace(config.filter,''), null, function (err, result) {
             if (err) {
                 console.warn(err);
                 return;
             }
-            userVocabulary[word] = {
+            _saveDB({
                 word: word,
                 related: word,
                 description: description,
                 mp3: (result.spells[1] && result.spells[1].mp3) || ''
-            };
+            });
             if(++i>=len){
-                console.log('写入数量:'+len);
-                _writeFile(userVocabulary);
-                console.log(config.url + '分析完成');
+                _this.output();
             }
         });
     };
 
-    var _writeFile = function(vocabulary){
-        var file = path.join(dataDir, 'vocabulary1.json');
-        fs.writeFile(file, JSON.stringify(vocabulary), {encoding: 'utf-8', flag: 'w'}, function (err) {
-            if (err) {
-                throw err;
+    var _saveDB = function(data){
+        vocabularyDAO.save(data, function(err){
+            if(err) {
+                console.warn(err);
+            } else {
+                console.log(data.word + " Success!");
             }
         });
     };
@@ -113,8 +120,28 @@ Crawler.prototype.analyse = function($){
         description = $(elem).find('.intro').text().trim();
         _getIciba(word, description);
     });
+
+    _this.output();
+};
+
+Crawler.prototype.output = function(){
+    var _writeFile = function(vocabulary){
+            var file = path.join(dataDir, 'vocabulary1.json');
+            fs.writeFile(file, JSON.stringify(vocabulary), {encoding: 'utf-8', flag: 'w'}, function (err) {
+                if (err) {
+                    throw err;
+                }
+            });
+        };
+    vocabularyDAO.find(vocabularyDAO.FIND_PREFECT_WORD,function(err, vocabulary){
+        if (err) {
+            console.warn(err);
+            return;
+        }
+        console.log('写入数量:'+vocabulary.length);
+        _writeFile(vocabulary);
+        console.log(config.url + '分析完成');
+    });
 };
 
 module.exports = Crawler;
-
-

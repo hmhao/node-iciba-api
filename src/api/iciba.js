@@ -150,6 +150,6 @@ Iciba.prototype.dict2 = function(word, fn){
         //console.log(result);
         return fn(null, result);
     });
-}
+};
 
 module.exports = Iciba;
