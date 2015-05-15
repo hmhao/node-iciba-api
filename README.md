@@ -19,3 +19,7 @@ http://localhost:8080/api/v?q={word}
     }
 }
 ```
+
+对于复合的词汇形如：AngularJS，将采用音标合成音频，即Angular音标和JS音标合并成一段音频
+
+声音的合并采用ffmpeg工具，参考[audiosprite](https://github.com/tonistiigi/audiosprite)
