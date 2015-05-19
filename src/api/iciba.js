@@ -157,7 +157,7 @@ Iciba.prototype.dict2 = function(word, fn){
             //console.log(result);
             return fn(null, result);
         });
-    })
+    });
 };
 
 Iciba.prototype.get = function(word, fn){
