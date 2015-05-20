@@ -100,7 +100,7 @@ function downloadComplete(err){
 
             async.forEachSeries(files, function(file, next){
                 fs.unlinkSync(file);
-                next()
+                next();
             });
             winston.info('All done');
         });

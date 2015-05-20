@@ -19,7 +19,7 @@ var config = {
     rule: '',
     charset: 'utf8',
     headers: '',
-    filter: /(\.?JS)|CSS|HTML|UI/i
+    filter: /^(?:JS|CSS|HTML|UI)|(?:JS|CSS|HTML|UI)$/ig
 };
 
 var Crawler = function () {
@@ -118,10 +118,69 @@ Crawler.prototype.analyse = function($){
     items.each(function(i, elem){
         word = $(elem).find('.info').text().trim();
         description = $(elem).find('.intro').text().trim();
-        _getIciba(word, description);
+        //_getIciba(word, description);
+        console.log(word,_this.splitWord(word));
     });
 
-    _this.output();
+    //_this.output();
+};
+
+Crawler.prototype.splitCamelCase = function(word){
+    var wordGroup = [];
+    var wordGroupTemp = [];
+    var filter = /[\w]+?(?=[A-Z])/g;
+    var i = 0, len = word.length, match;
+    while(match = filter.exec(word)){
+        wordGroupTemp.push(match[0]);
+        i = match.index + match[0].length;
+    }
+    if(i === 0){
+        wordGroupTemp.push(word);
+    }else if(i < len){
+        wordGroupTemp.push(word.substring(i));
+    }
+    for(i = 0, len = wordGroupTemp.length; i < len; i++){
+        if(wordGroupTemp[i].length > 1){
+            wordGroup.push(wordGroupTemp[i]);
+        }else{
+            var letter = wordGroupTemp[i];//合并多个大写字符
+            for(var j = i+1; j < wordGroupTemp.length && wordGroupTemp[j].length === 1; j++, i++){
+                letter +=  wordGroupTemp[j];
+            }
+            wordGroup.push(letter);
+        }
+    }
+    return wordGroup;
+};
+
+Crawler.prototype.splitSpecialCase = function(word){
+    var wordGroup = [];
+    var filter = /^(?:JS|CSS|HTML)|(?:JS|CSS|HTML)$/ig;
+    var i = 0, len = word.length, match;
+    while(match = filter.exec(word)){
+        if(match.index > i){
+            wordGroup.push(word.substring(i,match.index));
+        }
+        wordGroup.push(match[0]);
+        i = match.index + match[0].length;
+    }
+    if(i === 0){
+        wordGroup.push(word);
+    }else if(i < len){
+        wordGroup.push(word.substring(i));
+    }
+    return wordGroup;
+};
+
+Crawler.prototype.splitWord = function(word){
+    var wordGroup = word.split(/[\s\.-]/);
+    if(wordGroup.length === 1){//进行驼峰分词
+        wordGroup = this.splitCamelCase(word);
+    }
+    if(wordGroup.length === 1){//进特殊分词
+        wordGroup = this.splitSpecialCase(word);
+    }
+    return wordGroup;
 };
 
 Crawler.prototype.output = function(){

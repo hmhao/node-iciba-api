@@ -5,7 +5,10 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     nodeunit: {
-      files: ['test/**/*_test.js']
+      iciba: ['test/iciba_test.js'],
+      crawler: ['test/crawler_test.js'],
+      audiosprite: ['test/audiosprite_test.js'],
+      all: ['test/**/*_test.js']
     },
     jshint: {
       options: {

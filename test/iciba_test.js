@@ -1,7 +1,6 @@
 'use strict';
 
-var
-    Iciba = require('../src/api/iciba.js'),
+var Iciba = require('../src/api/iciba.js'),
     APIKEY = 'C231706B1BCAAE8D3CEB0E70B5AF138A',
     iciba = new Iciba(APIKEY);
 
@@ -31,7 +30,7 @@ exports['awesome'] = {
         // setup here
         done();
     },
-    'test1': function (test) {
+    'iciba_dict': function (test) {
         test.expect(2);
         iciba.dict('apple', function (err, res) {
             test.equal(err, null, 'should be no error');
@@ -39,7 +38,7 @@ exports['awesome'] = {
             test.done();
         });
     },
-    'test2': function (test) {
+    'iciba_query': function (test) {
         test.expect(2);
         iciba.query('apple',null, function (err, res) {
             test.equal(err, null, 'should be no error');
@@ -47,13 +46,20 @@ exports['awesome'] = {
             test.done();
         });
     },
-    'test3': function (test) {
+    'iciba_dict2': function (test) {
         test.expect(2);
         iciba.dict2('apple', function (err, res) {
             test.equal(err, null, 'should be no error');
             test.notEqual(res, null, 'should return sth.');
             test.done();
         });
+    },
+    'iciba_get': function (test) {
+        test.expect(2);
+        iciba.get('apple', function (err, res) {
+            test.equal(err, null, 'should be no error');
+            test.notEqual(res, null, 'should return sth.');
+            test.done();
+        });
     }
 };
-
