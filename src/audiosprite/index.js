@@ -88,7 +88,7 @@ function combineSprite(callback){
             callback(null, obj.src);
         });
     }else{
-        callback(new Error('No full download'));
+        callback(new Error(audioWords.join('') + ' not full download'));
     }
 }
 

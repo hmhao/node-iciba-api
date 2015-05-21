@@ -35,7 +35,7 @@ exports.audiosprite = {
             test.notEqual(res, null, 'should return sth.');
             test.ok(fs.existsSync(res), 'result file no exists');
             test.done();
-        })
+        });
     }/*,
     'wordError': function(test){
         var words = ['Node', '-', 'Web', 'Storm'];
@@ -44,6 +44,6 @@ exports.audiosprite = {
             test.notEqual(res, null, 'should return sth.');
             test.ok(fs.existsSync(res), 'result file no exists');
             test.done();
-        })
+        });
     }*/
 };
