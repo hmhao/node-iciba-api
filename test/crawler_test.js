@@ -61,8 +61,7 @@ exports['awesome'] = {
         test.ok(wordgroup.length > 0, 'length must > 0');
         if(wordgroup.length){
             test.ok(wordgroup[0] === 'js', 'split error');
-            test.ok(wordgroup[1] === 'perf', 'split error');
-            test.ok(wordgroup[2] === 'UI', 'split error');
+            test.ok(wordgroup[1] === 'perfUI', 'split error');
         }
         test.done();
     },

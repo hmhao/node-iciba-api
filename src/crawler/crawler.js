@@ -3,7 +3,7 @@ var request = require("request"),
     path = require('path'),
     fs = require('fs'),
     cheerio = require("cheerio"),
-    iciba = new (require('../api/iciba')),
+    iciba = new (require('../api/iciba'))(),
     vocabularyDAO = require('../model/vocabularyDAO');
 
 var root = path.join(__dirname, '../../');
