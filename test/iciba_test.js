@@ -25,6 +25,8 @@ var Iciba = require('../src/api/iciba.js'),
      test.ifError(value)
  */
 
+var word = 'dat';
+
 exports['awesome'] = {
     setUp: function (done) {
         // setup here
@@ -32,33 +34,45 @@ exports['awesome'] = {
     },
     'iciba_dict': function (test) {
         test.expect(2);
-        iciba.dict('apple', function (err, res) {
+        iciba.dict(word, function (err, res) {
             test.equal(err, null, 'should be no error');
             test.notEqual(res, null, 'should return sth.');
+            if(res.spells.length){
+                console.log('dict', res.spells);
+            }
             test.done();
         });
     },
     'iciba_query': function (test) {
         test.expect(2);
-        iciba.query('apple',null, function (err, res) {
+        iciba.query(word, null, function (err, res) {
             test.equal(err, null, 'should be no error');
             test.notEqual(res, null, 'should return sth.');
+            if(res.spells.length){
+                console.log('query', res.spells);
+            }
             test.done();
         });
     },
     'iciba_dict2': function (test) {
         test.expect(2);
-        iciba.dict2('apple', function (err, res) {
+        iciba.dict2(word, function (err, res) {
             test.equal(err, null, 'should be no error');
             test.notEqual(res, null, 'should return sth.');
+            if(res.spells.length){
+                console.log('dict2', res.spells);
+            }
             test.done();
         });
     },
     'iciba_get': function (test) {
         test.expect(2);
-        iciba.get('apple', function (err, res) {
+        iciba.get(word, function (err, res) {
             test.equal(err, null, 'should be no error');
             test.notEqual(res, null, 'should return sth.');
+            if(res.spells.length){
+                console.log('get', res.spells);
+            }
             test.done();
         });
     }

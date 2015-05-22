@@ -46,10 +46,10 @@ exports['awesome'] = {
         console.log(words);
         test.ok(words.length > 0, 'html error');
         test.done();
-    },
+    }*/,
     'query': function (test) {
         var word = {
-            word: 'Pagurian',
+            word: 'iScroll',
             description: '管理系统的前端解决方案， 致力于让前端设计，开发，测试，发布更简单'
         };
         crawler.query(word, function(err, res){
@@ -58,7 +58,7 @@ exports['awesome'] = {
             console.log(res);
             test.done();
         });
-    },
+    }/*,
     'output': function(test){
         crawler.output(function(err, res){
             test.equal(err, null, 'should be no error.');
@@ -66,7 +66,7 @@ exports['awesome'] = {
             test.ok(fs.existsSync(res), 'result file no exists');
             test.done();
         });
-    }*/,
+    },
     'handleWords': function(test){
         var words = [{
             word: 'Pagurian',
@@ -84,7 +84,7 @@ exports['awesome'] = {
             test.ok(fs.existsSync(res), 'result file no exists');
             test.done();
         });
-    }
+    }*/
     /*,
     'splitCamelCase': function(test){
         //var word = 'squashOurJSMethodNamesUITogetherLikeThis';

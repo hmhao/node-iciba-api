@@ -4,7 +4,6 @@ var request = require("request"),
     fs = require('fs'),
     async = require('async'),
     cheerio = require("cheerio"),
-    iciba = new (require('../api/iciba'))(),
     audiosprite = require('../audiosprite'),
     vocabularyDAO = require('../model/vocabularyDAO');
 
@@ -113,25 +112,14 @@ Crawler.prototype.query = function (word, callback) {
         },
         wordGroup = this.splitWord(word.word);
 
-    if (wordGroup.length > 1) {
-        audiosprite(wordGroup, function (err, url) {
-            if (err) {
-                callback(err, null);
-                return;
-            }
-            data.mp3 = url;
-            callback(null, data);
-        });
-    } else {
-        iciba.get(word.word, function (err, res) {
-            if (err) {
-                callback(err, null);
-                return;
-            }
-            data.mp3 = res.spells.length ? (res.spells.length === 2 ? res.spells[1].mp3 : res.spells[0].mp3) : '';
-            callback(null, data);
-        });
-    }
+    audiosprite(wordGroup, function (err, url) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        data.mp3 = url;
+        callback(null, data);
+    });
 };
 
 /**输出json文件
@@ -193,7 +181,7 @@ Crawler.prototype.handleWords = function (words, callback) {
 Crawler.prototype.splitCamelCase = function (word) {
     var wordGroup = [];
     var wordGroupTemp = [];
-    var filter = /[\w]+?(?=[A-Z])/g;
+    var filter = /[0-9](?=[a-z])|[\w]+?(?=[A-Z0-9])/g;
     var i = 0, len = word.length, match;
     while (match = filter.exec(word)) {
         wordGroupTemp.push(match[0]);
@@ -208,7 +196,7 @@ Crawler.prototype.splitCamelCase = function (word) {
         if (wordGroupTemp[i].length > 1) {
             wordGroup.push(wordGroupTemp[i]);
         } else {
-            var letter = wordGroupTemp[i];//合并多个大写字符
+            var letter = wordGroupTemp[i];//合并多个大写字符和数字
             for (var j = i + 1; j < wordGroupTemp.length && wordGroupTemp[j].length === 1; j++, i++) {
                 letter += wordGroupTemp[j];
             }
