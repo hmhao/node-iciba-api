@@ -64,7 +64,7 @@ function getWordSpell(word, callback){
                 callback(err);
                 return;
             }
-            var spellURL = res.spells.length ? (res.spells.length === 2 ? res.spells[1].mp3 : res.spells[0].mp3) : '';
+            var spellURL = res.spells.length ? res.spells[0].mp3 : '';
             callback(null, spellURL);
         });
     }

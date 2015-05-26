@@ -99,31 +99,18 @@ Iciba.prototype.dict = function (word, fn) {
 };
 
 Iciba.prototype.dict2 = function(word, fn){
-    var url = "http://www.iciba.com/";
-    return request(url, function(error, response) {//需要先访问主页获取cookie后查询才不会被屏蔽
-        var cookie = response.headers['set-cookie'] || '';
-        if(cookie){
-            var cookieString = cookie.join(';');
-            var uRand = /iciba_u_rand=.*(%40.*?);/g,
-                uRandT = /iciba_u_rand_t=(.*?);/g,
-                userID = '',
-                match;
-            if(match = uRandT.exec(cookieString)){
-                userID += match[1];
-                if(match = uRand.exec(cookieString)){
-                    userID += match[1];
-                    cookie.push('ICIBA_OUT_SEARCH_USER_ID='+userID);
-                }
+    var url = 'http://www.iciba.com/';
+    var j = request.jar();
+    return request({url: url, jar: j}, function(error, response) {//模拟浏览器请求，防被屏蔽
+        request({
+            uri: url + word,
+            jar: j,
+            headers:{
+                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko',
+                'Accept': 'text/html, application/xhtml+xml, */*',
+                'Accept-Language': 'zh-CN'
             }
-        }
-        var options = {
-            url: url + word,
-            headers: {
-                'set-cookie': cookie
-            }
-        };
-        //console.log(cookie);
-        request(options, function (err, res, data) {
+        }, function (err, res, data) {
             if (err) {
                 return fn('API request fail');
             }
