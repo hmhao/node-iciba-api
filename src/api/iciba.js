@@ -1,7 +1,7 @@
 var request = require('request'),
     cheerio = require('cheerio'),
     Iciba = function (key) {
-        this.key = key;
+        this.key = key || 'C231706B1BCAAE8D3CEB0E70B5AF138A';
     };
 
 Iciba.prototype.query = function (word, type, fn) {
@@ -99,15 +99,18 @@ Iciba.prototype.dict = function (word, fn) {
 };
 
 Iciba.prototype.dict2 = function(word, fn){
-    var url = "http://www.iciba.com/";
-    return request(url, function(error, response) {//需要先访问主页获取cookie后查询才不会被屏蔽
-        var options = {
-            url: url + word,
-            headers: {
-                'set-cookie':response.headers['set-cookie']
+    var url = 'http://www.iciba.com/';
+    var j = request.jar();
+    return request({url: url, jar: j}, function(error, response) {//模拟浏览器请求，防被屏蔽
+        request({
+            uri: url + word,
+            jar: j,
+            headers:{
+                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko',
+                'Accept': 'text/html, application/xhtml+xml, */*',
+                'Accept-Language': 'zh-CN'
             }
-        };
-        request(options, function (err, res, data) {
+        }, function (err, res, data) {
             if (err) {
                 return fn('API request fail');
             }
@@ -157,7 +160,7 @@ Iciba.prototype.dict2 = function(word, fn){
             //console.log(result);
             return fn(null, result);
         });
-    })
+    });
 };
 
 Iciba.prototype.get = function(word, fn){
